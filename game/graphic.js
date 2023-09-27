@@ -28,7 +28,18 @@ function init()
     player1 = new Player("player1", 0xffff00, new THREE.Vector2(50, 0), 0);
     scene.add(player1.graphic);
 
-    light1 = new Light("sun", 0xffffff, "0,0,340");
+    enemy1 = new Enemy("enemy1", 0xff0000, new THREE.Vector2(0, 0), 0);
+    scene.add(enemy1.graphic);
+
+    tmpTile = new THREE.Mesh(
+        new THREE.PlaneGeometry(sizeOfTileX-10, sizeOfTileY-10),
+        new THREE.MeshLambertMaterial({color: 0xffffff, transparent: true, opacity: 0.6}));
+    tmpTile.position.x = player1.graphic.position.x + sizeOfTileX;
+    tmpTile.position.y = player1.graphic.position.y;
+    scene.add(tmpTile);
+
+
+    light1 = new Lighht("sun", 0xffffff, "0,0,340");
     scene.add(light1);
 }
 
@@ -66,7 +77,7 @@ function Ground(color, size_x, size_y, nb_tile)
 
 function Lighht(name, color, position)
 {
-    pointLight = new THREE.PointLight(color, 50, 550);
+    pointLight = new THREE.PointLight(color, 50, 9000);
 
     pointLight.position.x = position.split(',')[0];
     pointLight.position.y = position.split(',')[1];

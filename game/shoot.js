@@ -35,6 +35,7 @@ function shoot()
 function collisions()
 {
     bullet_collision();
+    enemy_bullet_collision();
     player_collision();
     player_falling();
 }
@@ -55,18 +56,46 @@ function bullet_collision()
 
 }
 
+function enemy_bullet_collision()
+{
+    //collision between bullet and enemy
+    for (var i = 0; i < player1.bullets.length; i++)
+    {
+        if (Math.abs(player1.bullets[i].position.x - enemy1.graphic.position.x) <= 10 &&
+            Math.abs(player1.bullets[i].position.y - enemy1.graphic.position.y) <= 10)
+        {
+            scene.remove(player1.bullets[i]);
+            player1.bullets.splice(i, 1);
+            i--;
+            enemy1.displayInfo();
+            enemy1.dead();
+
+        }
+    }
+}
+
 function player_collision()
 {
     //collision between player and walls
     var x = player1.graphic.position.x + WIDTH / 2;
     var y = player1.graphic.position.y + HEIGHT / 2;
 
-    if ( x > WIDTH )
+    if ( x > WIDTH ) {
         player1.graphic.position.x -= x - WIDTH;
-    if ( y < 0 )
+        player1.position.x -= x - WIDTH;
+    }
+    if ( x < 0 ) {
+        player1.graphic.position.x -= x;
+        player1.position.x -= x;
+    }
+    if ( y < 0 ) {
         player1.graphic.position.y -= y;
-    if ( y > HEIGHT )
+        player1.position.y -= y;
+    }
+    if ( y > HEIGHT ) {
         player1.graphic.position.y -= y - HEIGHT;
+        player1.position.y -= y - HEIGHT;
+    }
 
 }
 
@@ -83,10 +112,10 @@ function player_falling()
     for (var i = 0; i < length; i++) {
         element = noGround[i];
 
-        var tileX = (element[0]) | 0;
-        var tileY = (element[1]) | 0;
-        var mtileX = (element[0] + sizeOfTileX) | 0;
-        var mtileY = (element[1] + sizeOfTileY) | 0;
+        var tileX = (element && element[0]) | 0;
+        var tileY = (element && element[1]) | 0;
+        var mtileX = (element && element[0] + sizeOfTileX) | 0;
+        var mtileY = (element && element[1] + sizeOfTileY) | 0;
 
         if ((x > tileX)
             && (x < mtileX)
